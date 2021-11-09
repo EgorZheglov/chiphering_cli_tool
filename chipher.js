@@ -1,6 +1,7 @@
 const fs = require('fs');
-const ShiftTransformStream = require('./ShiftTransformStream');
-const AtbashTransformStream = require('./AtbashCipher');
+const CeaserTransformStream = require('./CeaserTransformStream');
+const ROT8TransformStream = require('./ROT-8transformStream');
+const AtbashTransformStream = require('./AtbashTransformStream');
 const { pipeline } = require('stream');
 
 let reader;
@@ -9,7 +10,8 @@ let writer;
 
 if((new Set(process.argv)).size !== process.argv.length){
     // checking for duplications
-    throw 'invalid input data: input string contains duplications!';
+    process.stderr.write('invalid input data: input string contains duplications!');
+    process.exit(1);
 }
 
 
@@ -21,7 +23,8 @@ if(process.argv.some(el => el === '-i')) {
     const files = fs.readdirSync(__dirname, 'utf8');
     if(!files.some(el => el === path.slice(2))){
         // checking filename
-        throw `invalid input data: file ${path} not found`
+        process.stderr.write(`invalid input data: file ${path} not found`);
+        process.exit(1);
     }   
 
     reader = fs.createReadStream(path, { encoding: 'utf8' });
@@ -39,7 +42,8 @@ if(process.argv.some(el => el === '-o')){
     const files = fs.readdirSync(__dirname, 'utf8');
     if(!files.some(el => el === path.slice(2))){
         // checking filename
-        throw `invalid input data: file ${path} not found`
+        process.stderr.write(`invalid input data: file ${path} not found`);
+        process.exit(1);
     }   
 
     writer = fs.createWriteStream(path.toString(), { encoding: 'utf8' });
@@ -65,20 +69,23 @@ function streamsArray(chipherCode) {
         switch (el) {
 
             case 'C0':
-              streams.push(new ShiftTransformStream(false, 1));
+              streams.push(new CeaserTransformStream(false));
               break;
             case 'C1':
-              streams.push(new ShiftTransformStream(true, 1));
+              streams.push(new CeaserTransformStream(true));
               break;
             case 'R0':
-              streams.push(new ShiftTransformStream(false, 8));
+              streams.push(new ROT8TransformStream(false));
               break;
             case 'R1':
-              streams.push(new ShiftTransformStream(true, 8));
+              streams.push(new ROT8TransformStream(true));
               break; 
             case 'A':
               streams.push(new AtbashTransformStream());
               break;
+            default:
+              process.stderr.write(`invalid cipherCode: ${el}`);
+              process.exit(1);
         }       
     });
 

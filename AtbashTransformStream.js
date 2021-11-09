@@ -25,6 +25,7 @@ module.exports = class AtbashTransformStream extends TransformStream {
         }).join('');
 
         this.push(chipheredData);
+        
         callback();
     }
 }

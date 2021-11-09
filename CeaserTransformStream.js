@@ -1,13 +1,11 @@
 const alphabet = require('./aphabet-uppercase');
 const TransformStream = require('stream').Transform;
 
-module.exports = class ShiftTransformStream extends TransformStream {
-    constructor(isEnconding, shiftNumber){
-        // this class gives exports ROT-8 or Ceaser stream. becouse of their similarities.
-
+module.exports = class CeaserTransformStream extends TransformStream {
+    constructor(isEnconding){
+        // this class gives exports Ceaser stream.
         super();
-        this._shiftNumber = shiftNumber; // if encoding (isEncoding = true) - shift to the right, false to the left
-        this._isEncoding = isEnconding; // number of shift 1 - for the ceasar and 8 - for the ROT-8
+        this._isEncoding = isEnconding; // if encoding (isEncoding = true) - shift to the right, false to the left
     }
 
     _transform(chunk, encoding, callback) {
@@ -22,9 +20,9 @@ module.exports = class ShiftTransformStream extends TransformStream {
             let newIndex;
 
             if(this._isEncoding){
-                newIndex = alphabet.indexOf(symbol.toUpperCase()) + this._shiftNumber;
+                newIndex = alphabet.indexOf(symbol.toUpperCase()) + 1;
             } else {
-                newIndex = alphabet.indexOf(symbol.toUpperCase()) - this._shiftNumber;
+                newIndex = alphabet.indexOf(symbol.toUpperCase()) - 1;
             }
 
 
