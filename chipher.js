@@ -46,7 +46,7 @@ if(process.argv.some(el => el === '-o')){
         process.exit(1);
     }   
 
-    writer = fs.createWriteStream(path.toString(), { encoding: 'utf8' });
+    writer = fs.createWriteStream(path.toString(), { flags: 'a', encoding: 'utf8' });
 } else {
     writer = process.stdout;
 }
