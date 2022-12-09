@@ -1,5 +1,5 @@
 # Ciphering CLI Tool
-Тестовое задание, выполненое в рамках курса по nodeJS в RSschool. 
+Тестовое задание на работу с потоками чтения/записи в файлов, выполненое в рамках курса по NodeJS в RSschool. 
 Текст задания:
 
 ## Implement CLI tool that will encode and decode a text by 3 substitution ciphers:
